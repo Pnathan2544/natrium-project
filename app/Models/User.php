@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -17,10 +17,14 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name',     // type: string
+        'username', // type: string, constraint: unique
+        'image',    // type: string, constraint: nullable
+        'bio',      // type: text,   constraint: nullable
+        'email',    // type: string, constraint: unique
+        'password', // type: string
     ];
 
     /**
@@ -29,8 +33,8 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password',       // type: string, constraint: hidden
+        'remember_token', // type: string, constraint: hidden
     ];
 
     /**
@@ -41,8 +45,11 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'email_verified_at' => 'datetime', // type: datetime, constraint: nullable
+            'password' => 'hashed',            // type: string,   constraint: hashed
         ];
     }
 }
+
+
+/* relationship, and then business logic, then media rule */
