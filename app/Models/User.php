@@ -49,7 +49,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',            // type: string,   constraint: hashed
         ];
     }
+
+    /* relationship, and then business logic, then media rule */
+
 }
 
 
-/* relationship, and then business logic, then media rule */
