@@ -69,7 +69,45 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
             ->singleFile();
     }
 
-    /* relationship, and then business logic, then media rule */
+    public function imageUrl()
+    {
+        $media = $this->getFirstMedia('avatar');
+        if (!$media) {
+            return null;
+        }
+        if ($media->hasGeneratedConversion('avatar')) {
+            return $media->getUrl('avatar');
+        }
+        return $media->getUrl();
+    }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
+
+     public function following()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'user_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'user_id', 'follower_id');
+    }
+
+    public function isFollowedBy(?User $user)
+    {
+        if (!$user) {
+            return false;
+        }
+        return $this->followers()->where('follower_id', $user->id)->exists();
+    }
+
+    public function hasUpvoted(Article $article)
+    {
+        return $article->upvotes()->where('user_id', $this->id)->exists();
+    }
 
 }
 

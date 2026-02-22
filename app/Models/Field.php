@@ -8,5 +8,8 @@ class Field extends Model
 {
     protected $fillable = ['name']; // type: string
 
-    /* relationship next, no business logic */
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }
